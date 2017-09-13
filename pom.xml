@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>blackboard.plugin</groupId>
+  <artifactId>spring-b2-example</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <properties>
+    <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <learnVersion>9.1.110082.0</learnVersion>
+    <springVersion>3.1.1.RELEASE</springVersion>
+    <hibernateVersion>4.1.10.Final</hibernateVersion>
+    <bbhost>http://localhost:9876</bbhost>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>blackboard-repo</id>
+      <name>Blackboard Repository</name>
+      <url>https://bbprepo.blackboard.com/content/repositories/releases/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>blackboard-repo</id>
+      <name>Blackboard Repository</name>
+      <url>https://bbprepo.blackboard.com/content/repositories/releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>blackboard.platform</groupId>
+      <artifactId>bb-platform</artifactId>
+      <version>${learnVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>blackboard.platform</groupId>
+      <artifactId>bb-cms-admin</artifactId>
+      <version>${learnVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>blackboard.platform</groupId>
+      <artifactId>bb-taglibs</artifactId>
+      <version>${learnVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>blackboard.platform</groupId>
+      <artifactId>bb-spring-webapi</artifactId>
+      <version>${learnVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${springVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernateVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>${hibernateVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.17.1-GA</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- The following task automatically uploads the war file to blackboard. -->
+      <!-- It is called by executing 'mvn antrun:run' -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.5</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.oscelot</groupId>
+            <artifactId>b2deploy-task</artifactId>
+            <version>0.1.0</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <!-- The b2deploy task automatically deploys the war file onto the -->
+          <!-- development server so you don't have to. -->
+          <target>
+            <taskdef name="b2deploy" classpathref="maven.plugin.classpath" classname="org.oscelot.ant.B2DeployTask" />
+            <b2deploy
+              localfilepath="${project.build.directory}/${project.build.finalName}.war"
+              host="${bbhost}"
+              courseorgavailable="true"
+              clean="true"
+              webappName="spring-b2-example-BBLEARN" />
+          </target>
+          <!-- Requires "Starting Block" installed on the server. -->
+          <!-- Download the war file from  -->
+          <!-- http://behind.blackboard.com/downloads/details.aspx?d=1669 -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
